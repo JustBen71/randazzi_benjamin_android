@@ -2,31 +2,30 @@ package fr.nextu.randazzo_benjamin
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import fr.nextu.randazzo_benjamin.databinding.FragmentFirstBinding
+import fr.nextu.randazzo_benjamin.databinding.FragmentSecond2Binding
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class Second2Fragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentSecond2Binding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentSecond2Binding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -34,9 +33,12 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonFirst.setOnClickListener {
-            //startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), 678678)
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        binding.buttonSecond.setOnClickListener {
+            findNavController().navigate(R.id.action_Second2Fragment_to_First2Fragment)
+        }
+        binding.buttonSecondActivite.setOnClickListener {
+            val intent = Intent(super.getContext(), MainActivity::class.java)
+            startActivity(intent)
         }
     }
 

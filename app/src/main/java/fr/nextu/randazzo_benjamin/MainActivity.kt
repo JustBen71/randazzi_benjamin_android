@@ -1,5 +1,6 @@
 package fr.nextu.randazzo_benjamin
 
+import android.os.Build
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +10,24 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import fr.nextu.randazzo_benjamin.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    lateinit var json: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +42,16 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "variable", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
+
+        json = findViewById(R.id.json)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getPictureList()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,4 +75,32 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+    fun getPictureList() {
+        CoroutineScope(Dispatchers.IO).launch {
+            requestPictureList {
+                json.text = it
+            }
+        }
+    }
+
+    fun requestPictureList(callback: (String) -> Unit) {
+        val client = OkHttpClient()
+
+        val request: Request = Request.Builder()
+            .url("https://api.betaseries.com/movies/list")
+            .get()
+            .addHeader("X-BetaSeries-Key", "77b233b849ac")
+            .build()
+
+        val response: Response = client.newCall(request).execute()
+        CoroutineScope(Dispatchers.Main).launch {
+            callback(response.body?.string() ?: "")
+        }
+    }
+
+
+    /*fun test(){
+        ServiceTest.startAction(this)
+    }*/
 }

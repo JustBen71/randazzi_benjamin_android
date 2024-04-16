@@ -1,5 +1,7 @@
 package fr.nextu.randazzo_benjamin
 
+import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import fr.nextu.randazzo_benjamin.databinding.FragmentSecondBinding
+import fr.nextu.randazzo_benjamin.databinding.FragmentFirst2Binding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -14,6 +17,7 @@ import fr.nextu.randazzo_benjamin.databinding.FragmentSecondBinding
 class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
+    private var _binding2: FragmentFirst2Binding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,6 +38,10 @@ class SecondFragment : Fragment() {
 
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        }
+        binding.buttonSecondActivite.setOnClickListener {
+            val intent = Intent(super.getContext(), ActivityMain2::class.java)
+            startActivity(intent)
         }
     }
 
